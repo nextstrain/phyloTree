@@ -1,6 +1,8 @@
 import treeLayout from "./treeLayout";
 import treeCanvas from "./treeCanvas";
 import {preOrderIteration} from "./treeHelpers";
+import {drawBranches} from "./drawBranches";
+import {drawTips} from "./drawTips";
 
 /**
  * takes an augur json and converts it into the a tree structure
@@ -33,6 +35,8 @@ const phyloTree = function(nodes, params) {
     });
     const newTree = Object.assign(
                         {nodes:phyloNodes,
+                         tips: phyloNodes.filter(function(d){return d.terminal;}),
+                         internals: phyloNodes.filter(function(d){return !d.terminal;}),
                          layout:"rect",
                          distance:"div",
                          xScale: d3.scale.linear(),
@@ -42,12 +46,15 @@ const phyloTree = function(nodes, params) {
                         },
                         params);
     if (!newTree.dimension && newTree.svg){
-        newTree.dimensions = {width:parseInt(this.svg.attr("width"), 10),
-                              height:parseInt(this.svg.attr("height"), 10)};
+        newTree.dimensions = {width:parseInt(newTree.svg.attr("width"), 10),
+                              height:parseInt(newTree.svg.attr("height"), 10)};
     }
     // calculate layout and coordinates using defaults if not otherwise specified
     treeLayout(newTree);
     treeCanvas(newTree);
+    drawBranches(newTree, {});
+    drawTips(newTree, {});
+
     return newTree;
 }
 

@@ -87,15 +87,24 @@ const treeCanvas = function(tree){
             d.SVGcoords.yBase = tmp_yScale(d.layout.py);
         }
     );
+    if (tree.layout==="radial"){
+        const offset = tree.nodes[0].layout.depth;
+        tree.nodes.forEach(
+            function(d){
+                d.SVGcoords.rx = tmp_xScale(d.layout.depth) - tmp_xScale(offset);
+                d.SVGcoords.ry = tmp_yScale(d.layout.depth) - tmp_yScale(offset);
+            }
+        );
+    }
     if (tree.layout==="rect" || tree.layout==="radial"){
         var x;
-        tree.nodes.filter(function(d){return !d.terminal;}).forEach(
+        tree.internals.filter(function(d){return !d.terminal;}).forEach(
             function(d)
             {
                 d.SVGcoords.yTBarStart = tmp_yScale(d.layout.yTBarStart);
-                d.SVGcoords.yTBarEnd = tmp_yScale(d.layout.yTBarEnd);
+                d.SVGcoords.yTBarEnd =   tmp_yScale(d.layout.yTBarEnd);
                 d.SVGcoords.xTBarStart = tmp_xScale(d.layout.xTBarStart);
-                d.SVGcoords.xTBarEnd = tmp_xScale(d.layout.xTBarEnd);
+                d.SVGcoords.xTBarEnd =   tmp_xScale(d.layout.xTBarEnd);
             }
         );
     }

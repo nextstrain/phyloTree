@@ -110,8 +110,8 @@ const radialLayout = function(tree) {
     d.layout.py = d.layout.y * (d.layout.pDepth - offset) / (d.layout.depth - offset + 1e-15);
     d.layout.px = d.layout.x * (d.layout.pDepth - offset) / (d.layout.depth - offset + 1e-15);
     if (!d.terminal){
-        const angleCBar1 = 2.0 * circleFraction * Math.PI * d.minRank / nTips;
-        const angleCBar2 = 2.0 * circleFraction * Math.PI * d.maxRank / nTips;
+        const angleCBar1 = 2.0 * circleFraction * Math.PI * d.layout.minRank / nTips;
+        const angleCBar2 = 2.0 * circleFraction * Math.PI * d.layout.maxRank / nTips;
         d.layout.yTBarStart = (d.layout.depth - offset) * Math.cos(angleCBar1);
         d.layout.xTBarStart = (d.layout.depth - offset) * Math.sin(angleCBar1);
         d.layout.yTBarEnd = (d.layout.depth - offset) * Math.cos(angleCBar2);
@@ -123,7 +123,7 @@ const radialLayout = function(tree) {
 
 /**
  * calculates x,y coordinates for the unrooted layout. this is
- * done recursively via a the function unrootedPlaceSubtree
+ * done recursively via a the function placeSubtree
  * @return {null}
  */
 const unrootedLayout = function(tree){
@@ -133,28 +133,27 @@ const unrootedLayout = function(tree){
 
   // do preorder iteration for find locations for all subtrees
   const placeSubtree = function(node){
-    node.px = node.parent.layout.x;
-    node.px = node.parent.layout.y;
-    node.x = node.px+node.layout.branchLength*Math.cos(node.layout.tau + node.layout.w*0.5);
-    node.y = node.py+node.layout.branchLength*Math.sin(node.layout.tau + node.layout.w*0.5);
-    var eta = node.tau; //eta is the cumulative angle for the wedges in the layout
+    node.layout.px = node.parent.layout.x;
+    node.layout.py = node.parent.layout.y;
+    node.layout.x = node.layout.px+node.layout.branchLength*Math.cos(node.layout.tau + node.layout.w*0.5);
+    node.layout.y = node.layout.py+node.layout.branchLength*Math.sin(node.layout.tau + node.layout.w*0.5);
+    var eta = node.layout.tau; //eta is the cumulative angle for the wedges in the layout
     if (!node.terminal){
         for (var i=0; i<node.children.length; i++){
             var ch = node.children[i];
-            ch.w = 2*Math.PI*ch.leafCount/nTips;
-            ch.tau = eta;
-            eta += ch.w;
-            ch.px = node.x;
-            ch.py = node.y;
-            unrootedPlaceSubtree(ch);
+            ch.layout.w = 2*Math.PI*ch.stats.leafCount/nTips;
+            ch.layout.tau = eta;
+            eta += ch.layout.w;
+            placeSubtree(ch);
         }
     }
   };
 
   // set values for the root
-  tree.nodes[0].x = 0;
-  tree.nodes[0].y = 0;
-  tree.nodes[0].tau = 1.5*Math.PI;
+  tree.nodes[0].layout.x = 0;
+  tree.nodes[0].layout.y = 0;
+  tree.nodes[0].layout.tau = 1.5*Math.PI;
+  tree.nodes[0].layout.w = 2*Math.PI;
   placeSubtree(tree.nodes[0]);
 };
 
