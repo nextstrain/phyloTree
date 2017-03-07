@@ -41,7 +41,7 @@ const phyloTree = function(nodes, params) {
                          distance:"div",
                          xScale: d3.scale.linear(),
                          yScale: d3.scale.linear(),
-                         orientation:1,
+                         orientation:{x:1, y:1},
                          callbacks:{},
                         },
                         params);
@@ -52,9 +52,6 @@ const phyloTree = function(nodes, params) {
     // calculate layout and coordinates using defaults if not otherwise specified
     treeLayout(newTree);
     treeCanvas(newTree);
-    drawBranches(newTree, {});
-    drawTips(newTree, {});
-
     return newTree;
 }
 

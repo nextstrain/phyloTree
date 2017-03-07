@@ -32,19 +32,19 @@ const setScales = function(tree){
 
     } else {
         // for rectancular layout, allow flipping orientation of left right and top/botton
-        if (tree.orientation[0]>0){
+        if (tree.orientation.x>0){
           tree.xScale.range([margins.left, width - margins.right]);
         }else{
           tree.xScale.range([width - margins.right, margins.left]);
         }
-        if (tree.orientation[1]>0){
+        if (tree.orientation.y>0){
           tree.yScale.range([margins.top, height - margins.bottom]);
         } else {
           tree.yScale.range([height - margins.bottom, margins.top]);
         }
     }
 
-    if (typeof tree.visibleRectangle === "undefined"){
+    if (!tree.visibleRectangle){
         tree.visibleRectangle = fullView(tree.nodes);
     }
     if (tree.layout === "radial" || tree.layout === "unrooted"){

@@ -28,7 +28,7 @@ export const drawTips = function(tree, callbacks){
         d.tipAttributes.stroke = tmp_callbacks.stroke(d);
         d.tipAttributes["stroke-width"] = tmp_callbacks.strokeWidth(d);
     });
-    tree.tipElements.data(tree.tips)
+    tree.tipElements
         .attr("r", function(d){return d.tipAttributes.r;})
         .attr("cx", function(d){return d.SVGcoords.xTip;})
         .attr("cy", function(d){return d.SVGcoords.yTip;})

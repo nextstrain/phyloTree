@@ -168,6 +168,9 @@ const treeLayout = function(tree){
     setDistance(tree);
     calculateNodeRank(tree.nodes);
     addLeafCount(tree.nodes);
+    //reset the visible rectancle -- as this lives in tree space,
+    //it needs to be recalculated after layout change
+    tree.visibleRectangle = null;
 
     // depending on the chosen layout, determine the location in tree scaled 2d
     if (tree.layout === "radial"){
