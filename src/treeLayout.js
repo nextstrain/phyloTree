@@ -1,6 +1,7 @@
 //function in here go from node.n -> node.layout
 import d3 from "d3";
-import {postOrderIteration} from "./treeHelpers";
+import {postOrderIteration, preOrderIteration} from "./treeHelpers";
+import {visibleRectangleFromNodes} from "./zoom";
 
 /**
  * assign each node a rank depending on where in the tree layout its sits.
@@ -51,6 +52,10 @@ const setDistance = function(tree) {
   let dis = "div";
   if (tree.distance) {
     dis = tree.distance; // default is "div" for divergence
+  }
+  if (dis==="level"){
+    tree.nodes[0].n.attr.level=0;
+    preOrderIteration(tree.nodes[0], function(d){d.n.attr.level=d.parent.n.attr.level+1;});
   }
   if (typeof tree.nodes[0].n.attr[dis]==="undefined"){
       console.log("distance measure ", dis, "is undefined", tree.nodes[0].n);
@@ -192,9 +197,6 @@ const treeLayout = function(tree){
     setDistance(tree);
     calculateNodeRank(tree.nodes);
     addLeafCount(tree.nodes);
-    //reset the visible rectancle -- as this lives in tree space,
-    //it needs to be recalculated after layout change
-    tree.visibleRectangle = null;
 
     // depending on the chosen layout, determine the location in tree scaled 2d
     if (tree.layout === "radial"){
@@ -206,6 +208,8 @@ const treeLayout = function(tree){
     }else{
         rectangularLayout(tree);
     }
+    //reset the visible rectancle -- as this lives in tree space,
+    visibleRectangleFromNodes(tree);
 }
 
 

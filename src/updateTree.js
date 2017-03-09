@@ -199,3 +199,39 @@ export const updateTips = function(tree, attrs, styles, dt) {
     tree.tipElements.call(update());
   }
 };
+
+
+/**
+ * Update multiple style or attributes of  tree elements at once
+ * @param {object} tree phyloTree object
+ * @param {list} attr list of things to change
+ * @param {list} styles list of things to change
+ * @param {int} dt time in milliseconds
+ */
+export const updateBranches = function(tree, attrs, styles, dt) {
+  // function that return the closure object for updating the svg
+  function update() {
+    return function(selection) {
+      for (var i=0; i<styles.length; i++) {
+        var prop = styles[i];
+        selection.style(prop, function(d) {
+          return d.branchAttributes[prop];
+        });
+      }
+      for (var i = 0; i < attrs.length; i++) {
+        var prop = attrs[i];
+        selection.attr(prop, function(d) {
+          return d.branchAttributes[prop];
+        });
+      }
+    };
+  };
+  // update the svg
+  if (dt) {
+    tree.branchStemElements.transition().duration(dt).call(update());
+    tree.branchTbarElements.transition().duration(dt).call(update());
+  } else {
+    tree.branchStemElements.call(update());
+    tree.branchTbarElements.call(update());
+  }
+};

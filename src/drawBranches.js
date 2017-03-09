@@ -48,6 +48,7 @@ export const setupBranches = function(tree){
         .on("mouseover", function(d) {tree.callbacks.onBranchHover(d);})
         .on("mouseout", function(d) {tree.callbacks.onBranchLeave(d);})
         .on("click", function(d) {tree.callbacks.onBranchClick(d);})
+        .style("stroke-widthlinecap","round")
         .style("fill","none")
         .style("pointer-events", "auto")
         .style("cursor", "pointer");

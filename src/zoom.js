@@ -1,10 +1,12 @@
 import d3 from "d3";
 import {preOrderIteration} from "./treeHelpers";
+import {updateGeometry} from "./updateTree";
 
-export const zoomIntoClade = function(tree, d){
+export const zoomIntoClade = function(d, tree, dt){
     tree.nodes.forEach(function (d){d.state.inView = false;});
     preOrderIteration(d, function(d){d.state.inView=true;})
     visibleRectangleFromNodes(tree);
+    updateGeometry(tree, dt);
 }
 
 
@@ -13,8 +15,13 @@ export const visibleRectangleFromNodes = function(tree){
                             .map(function (d){return d.layout.x;});
     const yVals = tree.nodes.filter(function(d){return d.state.inView;})
                             .map(function (d){return d.layout.y;});
-    tree.visibleRectangle = {top:d3.max(yVals), bottom:d3.min(yVals),
-                             left:d3.min(xVals), right:d3.max(xVals)};
+    if (yVals.length){
+        tree.visibleRectangle = {top:d3.max(yVals), bottom:d3.min(yVals),
+                                 left:d3.min(xVals), right:d3.max(xVals)};
+
+    }else{
+        tree.visibleRectangle = null;
+    }
 }
 
 
@@ -37,7 +44,7 @@ export const resetView = function(tree){
 }
 
 
-export const zoomIn = function(tree, factor){
+export const zoomIn = function(factor, tree, dt){
     const cX = 0.5*(tree.visibleRectangle.left + tree.visibleRectangle.right);
     const dX = 0.5*(tree.visibleRectangle.right - tree.visibleRectangle.left);
     const cY = 0.5*(tree.visibleRectangle.top + tree.visibleRectangle.bottom);
@@ -48,4 +55,5 @@ export const zoomIn = function(tree, factor){
     tree.visibleRectangle.right = cX + dX/factor;
     tree.visibleRectangle.left = cX - dX/factor;
     inViewFromVisibleRectangle(tree);
+    updateGeometry(tree, dt);
 }

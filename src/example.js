@@ -14,13 +14,11 @@ var myTree;
 var treeplot = d3.select("#treeplot");
 
 const zoomClade = function(d){
-    zoomIntoClade(myTree, d);
-    updateGeometry(myTree, 1000);
+    zoomIntoClade(d, myTree, 800);
 }
 
 const zoom = function(){
-    zoomIn(myTree, 1.4);
-    updateGeometry(myTree, 1000);
+    zoomIn(1.4, myTree, 700);
 }
 
 d3.json("/data/zika_tree.json", function(err, data){
@@ -70,11 +68,12 @@ d3.select("#color").on("click", function(){
             d.branchAttributes.stroke = d.tipAttributes.stroke;
         }else{
             d.branchAttributes.stroke = d3.rgb(colors[(dummy+i)%10]).darker();
+            d.branchAttributes["stroke-width"] = 3+i%7;
         }
     });
     dummy++;
     updateTips(myTree, [], ['fill', 'stroke'], 1000);
-    updateBranchStyle(myTree, 'stroke', 1000);
+    updateBranches(myTree, [], ['stroke', 'stroke-width'], 1000);
 });
 
 d3.select("#both").on("click", function(){

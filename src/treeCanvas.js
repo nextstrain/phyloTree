@@ -35,6 +35,7 @@ const setScales = function(tree){
     }
 
     if (!tree.visibleRectangle){
+        console.log(tree.visibleRectangle);
         resetView(tree);
     }
     if (tree.layout === "radial" || tree.layout === "unrooted"){
