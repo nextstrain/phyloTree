@@ -15,11 +15,18 @@ const phyloTree = function(nodes, params) {
     const phyloNodes = [];
     const nodeArray = [];
     const makeNodeArray = function(node){
+        if (node.children){
+          for (var ni=0; ni<node.children.length; ni++){
+            node.children[ni].parent = node;
+          }
+        }
         nodeArray.push(node);
     }
-    preOrderIteration(nodes[0], makeNodeArray);
+    preOrderIteration(nodes, makeNodeArray);
+    nodeArray[0].parent = nodeArray[0];
     nodeArray.forEach(function(d){
-        const nodeShell = {n:d, stats:{}, layout:{}, SVGcoords:{}, tipAttributes:{}, branchAttributes:{}};
+        const nodeShell = {n:d, stats:{}, layout:{}, SVGcoords:{}, state:{},
+                           tipAttributes:{}, branchAttributes:{}};
         d.shell = nodeShell;
         nodeShell.parent = d.parent.shell;
         phyloNodes.push(nodeShell);
@@ -51,7 +58,9 @@ const phyloTree = function(nodes, params) {
     }
     // calculate layout and coordinates using defaults if not otherwise specified
     treeLayout(newTree);
-    treeCanvas(newTree);
+    if (newTree.svg){
+      treeCanvas(newTree);
+    }
     return newTree;
 }
 

@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+
+	<head>
+		<meta charset="utf-8">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<title>PhyloTree example</title>
+	</head>
+
+	<body>
+	<h3>PhyloTree example</h3>
+	<div>
+		<svg width=1000 height=1000 id="treeplot"></svg>
+	</div>
+	<h4>Layout</h4>
+	<select id="layout">
+		<option value="rect">rectangular</option>
+		<option value="radial">radial</option>
+		<option value="unrooted">unrooted</option>
+		<option value="clock">clock</option>
+	</select>
+	<h4>distance</h4>
+	<select id="distance">
+		<option value="num_date">time</option>
+		<option value="div">divergence</option>
+	</select>
+	<button id="size">Random size</button>
+	<button id="color">Random color</button>
+	<button id="both">Random both</button>
+	<button id="reset">reset view</button>
+	<script type="text/javascript" src="/dist/bundle.js"></script>
+	</body>
+</html>

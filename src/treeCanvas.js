@@ -1,16 +1,6 @@
 //function in here go from node.layout -> node.SVGcoords
 import d3 from "d3";
-
-/**
- * determine the full extend of the tree by taking min and max of x and y coordinates of every node
- * @param  {array} nodes array of all nodes
- * @return {object}       object with min/max x/y as left, right, top, bottom
- */
-const fullView = function(nodes){
-    const xVals = nodes.map(function (d){return d.layout.x;});
-    const yVals = nodes.map(function (d){return d.layout.y;});
-    return {top:d3.max(yVals), bottom:d3.min(yVals), left:d3.min(xVals), right:d3.max(xVals)};
-}
+import {visibleRectangleFromNodes, resetView} from "./zoom";
 
 /**
  * convert all coordinates in layout into values in SVG space
@@ -45,7 +35,7 @@ const setScales = function(tree){
     }
 
     if (!tree.visibleRectangle){
-        tree.visibleRectangle = fullView(tree.nodes);
+        resetView(tree);
     }
     if (tree.layout === "radial" || tree.layout === "unrooted"){
         // handle "radial and unrooted differently since they need to be square
@@ -110,6 +100,5 @@ const treeCanvas = function(tree){
     }
 
 }
-
 
 export default treeCanvas;

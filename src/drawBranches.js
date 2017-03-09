@@ -83,5 +83,9 @@ export const makePathTbar = function(tree){
         tree.internals.forEach(function(d){
             d.branchAttributes.pathTbar = `M ${d.SVGcoords.xTBarStart}, ${d.SVGcoords.yTBarStart} A ${d.SVGcoords.rx} ${d.SVGcoords.ry} 0  ${(d.smallBigArc?" 1 ":" 0 ")} 0  ${d.SVGcoords.xTBarEnd}, ${d.SVGcoords.yTBarEnd}`;
         });
+    }else{
+        tree.internals.forEach(function(d){
+            d.branchAttributes.pathTbar = '';
+        });
     }
 }

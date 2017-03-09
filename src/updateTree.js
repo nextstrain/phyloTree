@@ -18,6 +18,7 @@ const branchOpacity = function(tree, opacity, dt){
  * @param  {object} tree the phyloTree data structure
  */
 export const updateGeometry = function(tree, dt){
+    treeCanvas(tree);
     if (!dt){
         dt=0;
     }
@@ -48,6 +49,7 @@ export const updateGeometryFade = function(tree, dt){
         updateGeometry(tree, 0);
         return;
     }
+    treeCanvas(tree);
     branchOpacity(tree, 0.0, dt*0.25);
 
     tree.tipElements
@@ -82,8 +84,10 @@ export const changeLayout = function(tree, dt, newLayout){
     if (newLayout){
         tree.layout = newLayout;
     }
+    if (tree.layout==="clock" && tree.distance==="num_date"){
+        tree.distance = "div";
+    }
     treeLayout(tree);
-    treeCanvas(tree);
     updateGeometryFade(tree, dt)
 }
 
@@ -99,7 +103,6 @@ export const changeDistance = function(tree, dt, newDistance){
         tree.distance = newDistance;
     }
     treeLayout(tree);
-    treeCanvas(tree);
     updateGeometry(tree, dt)
 }
 
@@ -167,43 +170,32 @@ export const updateBranchAttribute = function(tree, attr, dt) {
 /**
  * Update multiple style or attributes of  tree elements at once
  * @param {object} tree phyloTree object
- * @param {treeElem} string either "tip" or "branch"
  * @param {list} attr list of things to change
  * @param {list} styles list of things to change
  * @param {int} dt time in milliseconds
-//  */
-// PhyloTree.prototype.updateMultipleArray = function(tree, treeElem, attrs, styles, dt) {
-//   // function that return the closure object for updating the svg
-//   function update(attrs, styles) {
-//     const store = (treeElem)
-//     return function(selection) {
-//       for (var i=0; i<stylesToSet.length; i++) {
-//         var prop = stylesToSet[i];
-//         selection.style(prop, function(d) {
-//           return d[prop];
-//         });
-//       }
-//       for (var i = 0; i < attrToSet.length; i++) {
-//         var prop = attrToSet[i];
-//         selection.attr(prop, function(d) {
-//           return d[prop];
-//         });
-//       }
-//       if (updatePath){
-//     selection.filter('.S').attr("d", function(d){return d.branch[0];})
-//       }
-//     };
-//   };
-//   // update the svg
-
-//   if (dt) {
-
-//       .transition().duration(dt)
-//       .call(update(Object.keys(attrs), Object.keys(styles)));
-//   } else {
-//     this.svg.selectAll(treeElem).filter(function(d) {
-//         return d.update;
-//       })
-//       .call(update(Object.keys(attrs), Object.keys(styles)));
-//   }
-// };
+ */
+export const updateTips = function(tree, attrs, styles, dt) {
+  // function that return the closure object for updating the svg
+  function update() {
+    return function(selection) {
+      for (var i=0; i<styles.length; i++) {
+        var prop = styles[i];
+        selection.style(prop, function(d) {
+          return d.tipAttributes[prop];
+        });
+      }
+      for (var i = 0; i < attrs.length; i++) {
+        var prop = attrs[i];
+        selection.attr(prop, function(d) {
+          return d.tipAttributes[prop];
+        });
+      }
+    };
+  };
+  // update the svg
+  if (dt) {
+    tree.tipElements.transition().duration(dt).call(update());
+  } else {
+    tree.tipElements.call(update());
+  }
+};

@@ -52,6 +52,11 @@ const setDistance = function(tree) {
   if (tree.distance) {
     dis = tree.distance; // default is "div" for divergence
   }
+  if (typeof tree.nodes[0].n.attr[dis]==="undefined"){
+      console.log("distance measure ", dis, "is undefined", tree.nodes[0].n);
+      return;
+  }
+
   // assign node and parent depth
   tree.nodes.forEach(function(d) {
     const layout = {};
@@ -155,6 +160,25 @@ const unrootedLayout = function(tree){
   tree.nodes[0].layout.tau = 1.5*Math.PI;
   tree.nodes[0].layout.w = 2*Math.PI;
   placeSubtree(tree.nodes[0]);
+};
+
+/**
+ * calculates corrdiantes for the rectangular treeLayou
+ * @param  {object} tree object containing the nodes and distance measure
+ * @return {[type]}        [description]
+ */
+const clockLayout = function(tree) {
+  if (typeof tree.nodes[0].n.attr["num_date"]==="undefined"){
+      console.log("clock layout requires numerical dates in attr ", tree.nodes[0].n);
+      return;
+  }
+  const dis = tree.distance;
+  tree.nodes.forEach(function(d) {
+    d.layout.x = d.n.attr["num_date"];
+    d.layout.y = d.layout.depth;
+    d.layout.px = d.n.parent.attr["num_date"];
+    d.layout.py = d.layout.pDepth;
+  });
 };
 
 
