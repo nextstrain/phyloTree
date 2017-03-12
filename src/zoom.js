@@ -2,19 +2,29 @@ import d3 from "d3";
 import {preOrderIteration} from "./treeHelpers";
 import {updateGeometry} from "./updateTree";
 
-export const zoomIntoClade = function(d, tree, dt){
+/**
+ * restrict the visible rectangle to a particular clade
+ * @param  {[type]} tree tree objecct
+ * @param  {[type]} d    clade to zoom into
+ * @param  {[type]} dt   transition duration
+ */
+export const zoomIntoClade = function(tree, d, dt){
     tree.nodes.forEach(function (d){d.state.inView = false;});
     preOrderIteration(d, function(d){d.state.inView=true;})
     visibleRectangleFromNodes(tree);
     updateGeometry(tree, dt);
 }
 
-
+/**
+ * calculate the visible rectangle based on a selection of nodes marked "inView"
+ * @param  {[type]} tree [description]
+ */
 export const visibleRectangleFromNodes = function(tree){
     const xVals = tree.nodes.filter(function(d){return d.state.inView;})
                             .map(function (d){return d.layout.x;});
     const yVals = tree.nodes.filter(function(d){return d.state.inView;})
                             .map(function (d){return d.layout.y;});
+    tree.visibleTips = tree.tips.filter(function(d){return d.state.inView;});
     if (yVals.length){
         tree.visibleRectangle = {top:d3.max(yVals), bottom:d3.min(yVals),
                                  left:d3.min(xVals), right:d3.max(xVals)};
@@ -24,13 +34,17 @@ export const visibleRectangleFromNodes = function(tree){
     }
 }
 
-
+/**
+ * determine the "inView" state of nodes from a rectanglet that is visible
+ * @param  {[type]} tree tree object
+ */
 export const inViewFromVisibleRectangle = function(tree){
     const visR = tree.visibleRectangle;
     tree.nodes.forEach(function(d){
         d.state.inView = ((d.layout.x>=visR.left)&&(d.layout.x<visR.right)
                         &&(d.layout.y>=visR.bottom)&&(d.layout<visR.top));
      });
+    tree.visibleTips = tree.tips.filter(function(d){return d.state.inView;}).length;
 }
 
 /**
@@ -51,7 +65,7 @@ export const resetView = function(tree){
  * @param  {object}} tree   the tree object, this function will change visibleRectabgle
  * @param  {int} dt     transition duration
  */
-export const zoomIn = function(factor, tree, dt){
+export const zoomIn = function(tree, factor, dt){
     const cX = 0.5*(tree.visibleRectangle.right + tree.visibleRectangle.left);
     const dX = 0.5*(tree.visibleRectangle.right - tree.visibleRectangle.left);
     const cY = 0.5*(tree.visibleRectangle.top + tree.visibleRectangle.bottom);
@@ -67,7 +81,7 @@ export const zoomIn = function(factor, tree, dt){
 
 
 
-export const zoomInY = function(factor, tree, dt){
+export const zoomInY = function(tree, factor, dt){
     const cY = 0.5*(tree.visibleRectangle.top + tree.visibleRectangle.bottom);
     const dY = 0.5*(tree.visibleRectangle.top - tree.visibleRectangle.bottom);
 
@@ -78,7 +92,7 @@ export const zoomInY = function(factor, tree, dt){
 }
 
 
-export const zoomInX = function(factor, tree, dt){
+export const zoomInX = function(tree, factor, dt){
     const cX = 0.5*(tree.visibleRectangle.right + tree.visibleRectangle.left);
     const dX = 0.5*(tree.visibleRectangle.right - tree.visibleRectangle.left);
 

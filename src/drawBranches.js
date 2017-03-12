@@ -10,9 +10,7 @@ const defaultBranchStrokeWidth = 2.0;
  * @param  {object} callbacks object with callback that specify the appearance of each tip
  */
 export const drawBranches = function(tree, callbacks){
-    if (!tree.branchStemElements){
-        setupBranches(tree);
-    }
+    setupBranches(tree);
     makePathStem(tree);
     makePathTbar(tree);
 	const tmp_callbacks = Object.assign({}, callbacks);
@@ -43,6 +41,7 @@ export const drawBranches = function(tree, callbacks){
  * @return {[type]}      [description]
  */
 export const setupBranches = function(tree){
+    tree.svg.selectAll(".branch").remove();
     tree.branchTbarElements = tree.svg.append("g").selectAll(".branch T")
         .data(tree.nodes)
         .enter()

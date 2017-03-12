@@ -12,9 +12,7 @@ const defaultTipStrokeWidth = 2.0;
  * @param  {object} callbacks object with callback that specify the appearance of each tip
  */
 export const drawTips = function(tree, callbacks){
-    if (!tree.tipElements){
-        setupTips(tree);
-    }
+    setupTips(tree);
 
 	const tmp_callbacks = Object.assign({}, callbacks);
 	if (!tmp_callbacks.r){tmp_callbacks.r = function(d){return defaultTipRadius;}};
@@ -45,6 +43,7 @@ export const drawTips = function(tree, callbacks){
  * @return {[type]}      [description]
  */
 export const setupTips = function(tree){
+    tree.svg.selectAll('.tip').remove();
     tree.tipElements = tree.svg.append("g").selectAll(".tip")
         .data(tree.tips)
         .enter()
