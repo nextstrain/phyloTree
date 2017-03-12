@@ -27,11 +27,13 @@ export const drawTips = function(tree, callbacks){
         d.tipAttributes.fill = tmp_callbacks.fill(d);
         d.tipAttributes.stroke = tmp_callbacks.stroke(d);
         d.tipAttributes["stroke-width"] = tmp_callbacks.strokeWidth(d);
+        d.tipAttributes.id = "tip_" + d.n.clade;
     });
     tree.tipElements
         .attr("r", function(d){return d.tipAttributes.r;})
         .attr("cx", function(d){return d.SVGcoords.xTip;})
         .attr("cy", function(d){return d.SVGcoords.yTip;})
+        .attr("id", function(d) {return d.tipAttributes.id;})
         .style("fill", function(d){return d.tipAttributes.fill;})
         .style("stroke", function(d){return d.tipAttributes.stroke;})
         .style("stroke-width", function(d){return d.tipAttributes["stroke-width"];});
@@ -43,12 +45,11 @@ export const drawTips = function(tree, callbacks){
  * @return {[type]}      [description]
  */
 export const setupTips = function(tree){
-    tree.tipElements = tree.svg.append("g").selectAll(".tip2")
+    tree.tipElements = tree.svg.append("g").selectAll(".tip")
         .data(tree.tips)
         .enter()
         .append("circle")
-        .attr("class", "tip2")
-        .attr("id", function(d) {return "tip_" + d.n.clade;})
+        .attr("class", "tip")
         .on("mouseover", function(d) {tree.callbacks.onTipHover(d);})
         .on("mouseout", function(d) {tree.callbacks.onTipLeave(d);})
         .on("click", function(d) {tree.callbacks.onTipClick(d);})

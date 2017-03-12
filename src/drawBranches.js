@@ -22,13 +22,17 @@ export const drawBranches = function(tree, callbacks){
     tree.nodes.forEach(function(d){
         d.branchAttributes.stroke = tmp_callbacks.stroke(d);
         d.branchAttributes["stroke-width"] = tmp_callbacks["stroke-width"](d);
+        d.branchAttributes.idTbar = "branch_T_" + d.n.clade;
+        d.branchAttributes.idStem = "branch_S_" + d.n.clade;
     });
     tree.branchStemElements
         .attr("d", function(d){return d.branchAttributes.pathStem;})
+        .attr("id", function(d){return d.branchAttributes.idStem;})
         .style("stroke", function(d){return d.branchAttributes.stroke;})
         .style("stroke-width", function(d){return d.branchAttributes["stroke-width"];});
     tree.branchTbarElements
         .attr("d", function(d){return d.branchAttributes.pathTbar;})
+        .attr("id", function(d){return d.branchAttributes.idTbar;})
         .style("stroke", function(d){return d.branchAttributes.stroke;})
         .style("stroke-width", function(d){return d.branchAttributes["stroke-width"];});
 }
@@ -39,40 +43,52 @@ export const drawBranches = function(tree, callbacks){
  * @return {[type]}      [description]
  */
 export const setupBranches = function(tree){
-    tree.branchStemElements = tree.svg.append("g").selectAll(".branch2 S")
+    tree.branchTbarElements = tree.svg.append("g").selectAll(".branch T")
         .data(tree.nodes)
         .enter()
         .append("path")
-        .attr("class", "branch2 S")
-        .attr("id", function(d) {return "branch_S_" + d.n.clade;})
+        .attr("class", "branch T")
         .on("mouseover", function(d) {tree.callbacks.onBranchHover(d);})
         .on("mouseout", function(d) {tree.callbacks.onBranchLeave(d);})
         .on("click", function(d) {tree.callbacks.onBranchClick(d);})
-        .style("stroke-widthlinecap","round")
         .style("fill","none")
         .style("pointer-events", "auto")
         .style("cursor", "pointer");
 
-    tree.branchTbarElements = tree.svg.append("g").selectAll(".branch2 T")
+    tree.branchStemElements = tree.svg.append("g").selectAll(".branch S")
         .data(tree.nodes)
         .enter()
         .append("path")
-        .attr("class", "branch2 T")
-        .attr("id", function(d) {return "branch_S_" + d.n.clade;})
+        .attr("class", "branch S")
         .on("mouseover", function(d) {tree.callbacks.onBranchHover(d);})
         .on("mouseout", function(d) {tree.callbacks.onBranchLeave(d);})
         .on("click", function(d) {tree.callbacks.onBranchClick(d);})
+        .style("stroke-linecap","round")
         .style("fill","none")
         .style("pointer-events", "auto")
         .style("cursor", "pointer");
+
 }
 
 
 export const makePathStem = function(tree){
-    tree.nodes.forEach(function(d){
-        d.branchAttributes.pathStem = `M ${d.SVGcoords.xBase}, ${d.SVGcoords.yBase}
-                                    L ${d.SVGcoords.xTip}, ${d.SVGcoords.yTip}`;
-    });
+    const stem_offset = tree.nodes.map(function(d){
+                return (0.5*(d.parent.branchAttributes["stroke-width"]
+                           - d.branchAttributes["stroke-width"]) || 0.0);
+            });
+    if (tree.layout === "rect"){
+        tree.nodes.forEach(function(d,i){
+            d.branchAttributes.pathStem = `M ${d.SVGcoords.xBase - stem_offset[i]}, ${d.SVGcoords.yBase} L ${d.SVGcoords.xTip}, ${d.SVGcoords.yTip}`;
+        });
+    }else if (tree.layout==="radial"){
+        tree.nodes.forEach(function(d,i){
+            d.branchAttributes.pathStem = `M ${d.SVGcoords.xBase - stem_offset[i]*Math.sin(d.layout.angle)}, ${d.SVGcoords.yBase - stem_offset[i]*Math.cos(d.layout.angle)} L ${d.SVGcoords.xTip}, ${d.SVGcoords.yTip}`;
+        });
+    }else{
+        tree.nodes.forEach(function(d,i){
+            d.branchAttributes.pathStem = `M ${d.SVGcoords.xBase}, ${d.SVGcoords.yBase} L ${d.SVGcoords.xTip}, ${d.SVGcoords.yTip}`;
+        });
+    }
 }
 
 export const makePathTbar = function(tree){

@@ -8,21 +8,33 @@ import {drawTips} from "./drawTips";
  * takes an augur json and converts it into the a tree structure
  * that included information needed for drawing and manipulation
  * of the tree.
- * @param  {object} nodes hierarchical json where .children are the descending branches
- * @return {object}       object storing nodes and other information about tree display
+ * @param  {object} treeJson hierarchical json where .children are the descending branches
+ * @return {object}       object storing treeJson and other information about tree display
  */
-const phyloTree = function(nodes, params) {
+const phyloTree = function(treeJson, params) {
     const phyloNodes = [];
     const nodeArray = [];
     const makeNodeArray = function(node){
         if (node.children){
+          var child;
           for (var ni=0; ni<node.children.length; ni++){
-            node.children[ni].parent = node;
+            child = node.children[ni];
+            child.parent = node;
+            // if no div attribute is given, construct from branch length
+            if ((!child.attr) && child.branch_length){
+              child.attr={}
+              child.attr.div = node.attr.div + child.branch_length;
+            }
           }
         }
         nodeArray.push(node);
     }
-    preOrderIteration(nodes, makeNodeArray);
+    if (!treeJson.attr){
+          console.log(treeJson);
+        treeJson.attr = {}
+        treeJson.attr.div=0;
+    }
+    preOrderIteration(treeJson, makeNodeArray);
     nodeArray[0].parent = nodeArray[0];
     nodeArray.forEach(function(d){
         const nodeShell = {n:d, stats:{}, layout:{}, SVGcoords:{}, state:{},

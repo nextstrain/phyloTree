@@ -44,8 +44,15 @@ export const resetView = function(tree){
 }
 
 
+/**
+ * zomming functions. either zoom both directions by the same factor,
+ * or zoom x and y separatly
+ * @param  {float} factor factor to zoom
+ * @param  {object}} tree   the tree object, this function will change visibleRectabgle
+ * @param  {int} dt     transition duration
+ */
 export const zoomIn = function(factor, tree, dt){
-    const cX = 0.5*(tree.visibleRectangle.left + tree.visibleRectangle.right);
+    const cX = 0.5*(tree.visibleRectangle.right + tree.visibleRectangle.left);
     const dX = 0.5*(tree.visibleRectangle.right - tree.visibleRectangle.left);
     const cY = 0.5*(tree.visibleRectangle.top + tree.visibleRectangle.bottom);
     const dY = 0.5*(tree.visibleRectangle.top - tree.visibleRectangle.bottom);
@@ -57,3 +64,27 @@ export const zoomIn = function(factor, tree, dt){
     inViewFromVisibleRectangle(tree);
     updateGeometry(tree, dt);
 }
+
+
+
+export const zoomInY = function(factor, tree, dt){
+    const cY = 0.5*(tree.visibleRectangle.top + tree.visibleRectangle.bottom);
+    const dY = 0.5*(tree.visibleRectangle.top - tree.visibleRectangle.bottom);
+
+    tree.visibleRectangle.bottom = cY - dY/factor;
+    tree.visibleRectangle.top = cY + dY/factor;
+    inViewFromVisibleRectangle(tree);
+    updateGeometry(tree, dt);
+}
+
+
+export const zoomInX = function(factor, tree, dt){
+    const cX = 0.5*(tree.visibleRectangle.right + tree.visibleRectangle.left);
+    const dX = 0.5*(tree.visibleRectangle.right - tree.visibleRectangle.left);
+
+    tree.visibleRectangle.left = cX - dX/factor;
+    tree.visibleRectangle.right = cX + dX/factor;
+    inViewFromVisibleRectangle(tree);
+    updateGeometry(tree, dt);
+}
+
