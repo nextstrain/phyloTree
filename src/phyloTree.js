@@ -28,7 +28,7 @@ const phyloTree = function(treeJson, params) {
           }
         }
         //add clade (serves as a unique node identifier) if not set
-        if (!node.n.clade){node.n.clade = nodeArray.length+1;}
+        if (!node.clade){node.clade = nodeArray.length+1;}
         nodeArray.push(node);
     }
     if (!treeJson.attr){
