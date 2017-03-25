@@ -21,9 +21,15 @@ const phyloTree = function(treeJson, params) {
             child = node.children[ni];
             child.parent = node;
             // if no div attribute is given, construct from branch length
-            if ((!child.attr) && child.branch_length){
-              child.attr={}
-              child.attr.div = node.attr.div + child.branch_length;
+            if (!child.attr){
+              child.attr={};
+            }
+            if (!child.attr.div){
+              if (child.branch_length){
+                child.attr.div = node.attr.div + child.branch_length;
+              }else{
+                child.attr.div = node.attr.div;
+              }
             }
           }
         }
@@ -34,7 +40,7 @@ const phyloTree = function(treeJson, params) {
     if (!treeJson.attr){
           console.log(treeJson);
         treeJson.attr = {}
-        treeJson.attr.div=0;
+        treeJson.attr.div=0.0;
     }
     preOrderIteration(treeJson, makeNodeArray);
     nodeArray[0].parent = nodeArray[0];
