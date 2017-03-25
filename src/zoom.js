@@ -44,7 +44,7 @@ export const inViewFromVisibleRectangle = function(tree){
         d.state.inView = ((d.layout.x>=visR.left)&&(d.layout.x<visR.right)
                         &&(d.layout.y>=visR.bottom)&&(d.layout.y<visR.top));
      });
-    tree.visibleTips = tree.tips.filter(function(d){return d.state.inView;}).length;
+    tree.visibleTips = tree.tips.filter(function(d){return d.state.inView;});
 }
 
 /**
