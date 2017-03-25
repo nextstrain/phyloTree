@@ -24,7 +24,7 @@ export const visibleRectangleFromNodes = function(tree){
                             .map(function (d){return d.layout.x;});
     const yVals = tree.nodes.filter(function(d){return d.state.inView;})
                             .map(function (d){return d.layout.y;});
-    tree.visibleTips = tree.tips.filter(function(d){return d.state.inView;});
+    tree.visibleTips = tree.tips.filter(function(d){return d.state.inView;}).length;
     if (yVals.length){
         tree.visibleRectangle = {top:d3.max(yVals), bottom:d3.min(yVals),
                                  left:d3.min(xVals), right:d3.max(xVals)};
