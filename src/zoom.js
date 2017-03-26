@@ -8,9 +8,12 @@ import {updateGeometry} from "./updateTree";
  * @param  {[type]} d    clade to zoom into
  * @param  {[type]} dt   transition duration
  */
-export const zoomIntoClade = function(tree, d, dt){
+export const zoomIntoClade = function(tree, d, dt, setSelected){
     tree.nodes.forEach(function (d){d.state.inView = false;});
     preOrderIteration(d, function(d){d.state.inView=true;})
+    if (setSelected){
+        tree.nodes.forEach(function (d){d.state.selected = d.state.inView;});
+    }
     visibleRectangleFromNodes(tree);
     updateGeometry(tree, dt);
 }
