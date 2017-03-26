@@ -35,15 +35,18 @@ export const tipLabels = function(tree, labelText, fontSize, yPad, xPad, align){
             .style("text-anchor", tmpAlign)
             .style("font-size", function(d){return fontSize(d).toString()+"px";});
     }else if (tree.layout==="radial"){
+        const dr = Math.sqrt(xPad*xPad + yPad*yPad)
         tree.branchLabels = tree.svg.selectAll(".tipLabel")
             .data(tree.nodes.filter(function(d){return (fontSize(d) && labelText(d).length);}))
             .enter().append("text")
             .text(labelText)
             .attr("class", "tipLabel")
-            .attr("x", function(d){return d.SVGcoords.xTip + xPad;})
-            .attr("y", function(d){return d.SVGcoords.yTip + yPad;})
-            .attr("rotate",function(d){return d.layout.angle;})
-            .style("text-anchor", tmpAlign)
+            .attr("x", function(d){return d.SVGcoords.xTip + dr*Math.sin(d.layout.angle);})
+            .attr("y", function(d){return d.SVGcoords.yTip + dr*Math.cos(d.layout.angle);})
+            .style("text-anchor", function(d){return (d.layout.angle>Math.PI)?"end":"start";})
+            .attr("transform",function(d){
+                return `rotate(${(-180/Math.PI*d.layout.angle)%180+90},${d.SVGcoords.xTip + dr*Math.sin(d.layout.angle)}, ${d.SVGcoords.yTip + dr*Math.cos(d.layout.angle)})`;})
+//            .attr("rotate",function(d){return 180/Math.Pi*d.layout.angle;})
             .style("font-size", function(d){return fontSize(d).toString()+"px";});
 
     }
