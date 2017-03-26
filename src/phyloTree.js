@@ -77,6 +77,7 @@ const phyloTree = function(treeJson, params) {
     // calculate layout and coordinates using defaults if not otherwise specified
     treeLayout(newTree);
     if (newTree.svg){
+      newTree.topLevelGroup = newTree.svg.append("g");
       treeCanvas(newTree);
     }
     return newTree;

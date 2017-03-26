@@ -42,7 +42,7 @@ export const drawBranches = function(tree, callbacks){
  */
 export const setupBranches = function(tree){
     tree.svg.selectAll(".branch").remove();
-    tree.branchTbarElements = tree.svg.append("g").selectAll(".branch T")
+    tree.branchTbarElements = tree.topLevelGroup.selectAll(".branch T")
         .data(tree.nodes)
         .enter()
         .append("path")
@@ -54,7 +54,7 @@ export const setupBranches = function(tree){
         .style("pointer-events", "auto")
         .style("cursor", "pointer");
 
-    tree.branchStemElements = tree.svg.append("g").selectAll(".branch S")
+    tree.branchStemElements = tree.topLevelGroup.selectAll(".branch S")
         .data(tree.nodes)
         .enter()
         .append("path")

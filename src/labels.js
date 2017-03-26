@@ -7,7 +7,7 @@ export const branchLabels = function(tree, labelText, fontSize, yPad, xPad, alig
     const tmpYPad = yPad || 0.0;
     const tmpXPad = xPad || 0.0;
     const tmpAlign = align || "end";
-    tree.branchLabels = tree.svg.selectAll(".branchLabel")
+    tree.branchLabels = tree.topLevelGroup.selectAll(".branchLabel")
         .data(tree.nodes.filter(function(d){return (fontSize(d) && labelText(d).length);}))
         .enter().append("text")
         .text(labelText)
@@ -18,14 +18,12 @@ export const branchLabels = function(tree, labelText, fontSize, yPad, xPad, alig
         .style("font-size", function(d){return fontSize(d).toString()+"px";});
 }
 
-
-
 export const tipLabels = function(tree, labelText, fontSize, yPad, xPad, align){
     const tmpYPad = yPad || 0.0;
     const tmpXPad = xPad || 0.0;
     const tmpAlign = align || "start";
     if (tree.layout==="rect"){
-        tree.branchLabels = tree.svg.selectAll(".tipLabel")
+        tree.branchLabels = tree.topLevelGroup.selectAll(".tipLabel")
             .data(tree.nodes.filter(function(d){return (fontSize(d) && labelText(d).length);}))
             .enter().append("text")
             .text(labelText)
@@ -36,7 +34,7 @@ export const tipLabels = function(tree, labelText, fontSize, yPad, xPad, align){
             .style("font-size", function(d){return fontSize(d).toString()+"px";});
     }else if (tree.layout==="radial" ||tree.layout==="unrooted"){
         const dr = Math.sqrt(xPad*xPad + yPad*yPad)
-        tree.branchLabels = tree.svg.selectAll(".tipLabel")
+        tree.branchLabels = tree.topLevelGroup.selectAll(".tipLabel")
             .data(tree.nodes.filter(function(d){return (fontSize(d) && labelText(d).length);}))
             .enter().append("text")
             .text(labelText)

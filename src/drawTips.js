@@ -44,7 +44,7 @@ export const drawTips = function(tree, callbacks){
  */
 export const setupTips = function(tree){
     tree.svg.selectAll('.tip').remove();
-    tree.tipElements = tree.svg.append("g").selectAll(".tip")
+    tree.tipElements = tree.topLevelGroup.selectAll(".tip")
         .data(tree.tips)
         .enter()
         .append("circle")
