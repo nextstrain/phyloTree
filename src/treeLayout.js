@@ -145,8 +145,9 @@ const unrootedLayout = function(tree){
   const placeSubtree = function(node){
     node.layout.px = node.parent.layout.x;
     node.layout.py = node.parent.layout.y;
-    node.layout.x = node.layout.px+node.layout.branchLength*Math.cos(node.layout.tau + node.layout.w*0.5);
-    node.layout.y = node.layout.py+node.layout.branchLength*Math.sin(node.layout.tau + node.layout.w*0.5);
+    node.layout.angle = node.layout.tau + node.layout.w*0.5;
+    node.layout.x = node.layout.px+node.layout.branchLength*Math.sin(node.layout.angle);
+    node.layout.y = node.layout.py+node.layout.branchLength*Math.cos(node.layout.angle);
     var eta = node.layout.tau; //eta is the cumulative angle for the wedges in the layout
     if (!node.terminal){
         for (var i=0; i<node.children.length; i++){
@@ -162,7 +163,7 @@ const unrootedLayout = function(tree){
   // set values for the root
   tree.nodes[0].layout.x = 0;
   tree.nodes[0].layout.y = 0;
-  tree.nodes[0].layout.tau = 1.5*Math.PI;
+  tree.nodes[0].layout.tau = 0.0*Math.PI;
   tree.nodes[0].layout.w = 2*Math.PI;
   placeSubtree(tree.nodes[0]);
 };

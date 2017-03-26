@@ -34,7 +34,7 @@ export const tipLabels = function(tree, labelText, fontSize, yPad, xPad, align){
             .attr("y", function(d){return d.SVGcoords.yTip + yPad;})
             .style("text-anchor", tmpAlign)
             .style("font-size", function(d){return fontSize(d).toString()+"px";});
-    }else if (tree.layout==="radial"){
+    }else if (tree.layout==="radial" ||tree.layout==="unrooted"){
         const dr = Math.sqrt(xPad*xPad + yPad*yPad)
         tree.branchLabels = tree.svg.selectAll(".tipLabel")
             .data(tree.nodes.filter(function(d){return (fontSize(d) && labelText(d).length);}))
