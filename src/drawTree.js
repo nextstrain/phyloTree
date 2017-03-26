@@ -1,5 +1,6 @@
 import {drawTips} from "./drawTips";
 import {drawBranches} from "./drawBranches";
+import {addScaleBar} from "./scaleBar";
 
 const drawTree = function(tree, callbacks, features){
     if (callbacks && callbacks.branch){
@@ -11,6 +12,9 @@ const drawTree = function(tree, callbacks, features){
         drawTips(tree, callbacks.tip);
     }else{
         drawTips(tree, {});
+    }
+    if (tree.scaleBar || tree.scalebar){
+        addScaleBar(tree);
     }
 }
 

@@ -1,8 +1,6 @@
 import treeLayout from "./treeLayout";
 import treeCanvas from "./treeCanvas";
 import {preOrderIteration} from "./treeHelpers";
-import {drawBranches} from "./drawBranches";
-import {drawTips} from "./drawTips";
 
 /**
  * takes an augur json and converts it into the a tree structure

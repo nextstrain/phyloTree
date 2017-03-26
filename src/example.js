@@ -1,6 +1,7 @@
 import d3 from "d3";
 import phyloTree from "./phyloTree";
 import drawTree from "./drawTree";
+import {addScaleBar} from "./scaleBar";
 import {zoomIntoClade, zoomIn} from "./zoom";
 import {changeLayout, changeDistance, updateGeometry,
         updateTipAttribute, updateTipStyle, updateTips,
@@ -27,13 +28,14 @@ const zoom = function(){
 d3.json("/data/zika_tree.json", function(err, data){
     console.log(data, err);
     if (data){
-        myTree = phyloTree(data, {svg:treeplot, margins:{top:10, bottom:10, left:10, right:10},
+        myTree = phyloTree(data, {layout:"unrooted", svg:treeplot, margins:{top:10, bottom:10, left:10, right:10},
                                   callbacks:{onBranchClick:zoomClade,
                                             onBranchHover:function(d){console.log(d.n.strain);},
                                             onBranchLeave:function(d){console.log(d.n.strain);},
                                             onTipHover:function(d){console.log(d.n.strain);},
                                             onTipLeave:function(d){console.log(d.n.strain);}
-                                            }
+                                            }, scalebar:true
+
                                  }
                            );
         console.log(myTree);
@@ -59,7 +61,7 @@ d3.json("/data/zika_tree.json", function(err, data){
     }
     const tipFontSize = function(d){return 4.0;}
     //branchLabels(myTree, branchText, branchFontSize, -5, -5);
-    tipLabels(myTree, tipText, tipFontSize, 5, 3);
+    tipLabels(myTree, tipText, tipFontSize, 5,5);
 });
 
 d3.json("/data/coreGenomeTree.json", function(err, data){

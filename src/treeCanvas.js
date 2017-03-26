@@ -1,6 +1,7 @@
 //function in here go from node.layout -> node.SVGcoords
 import d3 from "d3";
 import {visibleRectangleFromNodes, resetView} from "./zoom";
+import {addScaleBar} from "./scaleBar";
 
 /**
  * convert all coordinates in layout into values in SVG space
@@ -99,7 +100,9 @@ const treeCanvas = function(tree){
             }
         );
     }
-
+    if (tree.scaleBar || tree.scalebar){
+        addScaleBar(tree);
+    }
 }
 
 export default treeCanvas;
