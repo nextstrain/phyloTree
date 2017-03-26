@@ -38,11 +38,12 @@ export const visibleRectangleFromNodes = function(tree){
  * determine the "inView" state of nodes from a rectanglet that is visible
  * @param  {[type]} tree tree object
  */
-export const inViewFromVisibleRectangle = function(tree){
+export const inViewFromVisibleRectangle = function(tree, setSelected){
     const visR = tree.visibleRectangle;
     tree.nodes.forEach(function(d){
         d.state.inView = ((d.layout.x>=visR.left)&&(d.layout.x<visR.right)
                         &&(d.layout.y>=visR.bottom)&&(d.layout.y<visR.top));
+        if (setSelected){d.state.selected = d.state.inView;}
      });
     tree.visibleTips = tree.tips.filter(function(d){return d.state.inView;});
 }
@@ -54,7 +55,7 @@ export const inViewFromVisibleRectangle = function(tree){
  */
 export const resetView = function(tree){
     tree.nodes.forEach(function (d){d.state.inView = true;});
-    visibleRectangleFromNodes(tree);
+    visibleRectangleFromNodes(tree, true);
 }
 
 
@@ -65,7 +66,7 @@ export const resetView = function(tree){
  * @param  {object}} tree   the tree object, this function will change visibleRectabgle
  * @param  {int} dt     transition duration
  */
-export const zoomIn = function(tree, factor, dt){
+export const zoomIn = function(tree, factor, dt, setSelected){
     const cX = 0.5*(tree.visibleRectangle.right + tree.visibleRectangle.left);
     const dX = 0.5*(tree.visibleRectangle.right - tree.visibleRectangle.left);
     const cY = 0.5*(tree.visibleRectangle.top + tree.visibleRectangle.bottom);
@@ -75,30 +76,30 @@ export const zoomIn = function(tree, factor, dt){
     tree.visibleRectangle.top = cY + dY/factor;
     tree.visibleRectangle.right = cX + dX/factor;
     tree.visibleRectangle.left = cX - dX/factor;
-    inViewFromVisibleRectangle(tree);
+    inViewFromVisibleRectangle(tree, setSelected);
     updateGeometry(tree, dt);
 }
 
 
 
-export const zoomInY = function(tree, factor, dt){
+export const zoomInY = function(tree, factor, dt, setSelected){
     const cY = 0.5*(tree.visibleRectangle.top + tree.visibleRectangle.bottom);
     const dY = 0.5*(tree.visibleRectangle.top - tree.visibleRectangle.bottom);
 
     tree.visibleRectangle.bottom = cY - dY/factor;
     tree.visibleRectangle.top = cY + dY/factor;
-    inViewFromVisibleRectangle(tree);
+    inViewFromVisibleRectangle(tree, setSelected);
     updateGeometry(tree, dt);
 }
 
 
-export const zoomInX = function(tree, factor, dt){
+export const zoomInX = function(tree, factor, dt, setSelected){
     const cX = 0.5*(tree.visibleRectangle.right + tree.visibleRectangle.left);
     const dX = 0.5*(tree.visibleRectangle.right - tree.visibleRectangle.left);
 
     tree.visibleRectangle.left = cX - dX/factor;
     tree.visibleRectangle.right = cX + dX/factor;
-    inViewFromVisibleRectangle(tree);
+    inViewFromVisibleRectangle(tree, setSelected);
     updateGeometry(tree, dt);
 }
 
