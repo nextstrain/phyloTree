@@ -44,8 +44,8 @@ export const visibleRectangleFromNodes = function(tree){
 export const inViewFromVisibleRectangle = function(tree, setSelected){
     const visR = tree.visibleRectangle;
     tree.nodes.forEach(function(d){
-        d.state.inView = ((d.layout.x>=visR.left)&&(d.layout.x<visR.right)
-                        &&(d.layout.y>=visR.bottom)&&(d.layout.y<visR.top));
+        d.state.inView = ((d.layout.x>=visR.left)&&(d.layout.x<=visR.right)
+                        &&(d.layout.y>=visR.bottom)&&(d.layout.y<=visR.top));
         if (setSelected){d.state.selected = d.state.inView;}
      });
     tree.visibleTips = tree.tips.filter(function(d){return d.state.inView;});
