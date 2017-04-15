@@ -68,6 +68,8 @@ const phyloTree = function(treeJson, params) {
                          yScale: d3.scale.linear(),
                          orientation:{x:1, y:1},
                          callbacks:{},
+                         zoomLevel:{x:1.0, y:1.0},
+                         pan:{x:0.0, y:0.0},
                         },
                         params);
     if (!newTree.dimension && newTree.svg){
