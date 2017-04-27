@@ -54,7 +54,7 @@ const phyloTree = function(treeJson, params) {
         nodeArray.push(node);
     }
     if (!treeJson.attr){
-          console.log(treeJson);
+          //console.log(treeJson);
         treeJson.attr = {}
         treeJson.attr.div=0.0;
     }
