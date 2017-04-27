@@ -1,9 +1,6 @@
 import d3 from "d3";
 
 
-const defaultBranchStroke = "#555";
-const defaultBranchStrokeWidth = 2.0;
-
 /**
  *
  * @param  {object} tree the phyloTree data structure
@@ -14,8 +11,8 @@ export const drawBranches = function(tree, callbacks){
     makePathStem(tree);
     makePathTbar(tree);
 	const tmp_callbacks = Object.assign({}, callbacks);
-	if (!tmp_callbacks.stroke){tmp_callbacks.stroke = function(d){return defaultBranchStroke;}};
-    if (!tmp_callbacks.strokeWidth){tmp_callbacks["stroke-width"] = function(d){return defaultBranchStrokeWidth;}};
+	if (!tmp_callbacks.stroke){tmp_callbacks.stroke = function(d){return tree.branchStroke;}};
+    if (!tmp_callbacks.strokeWidth){tmp_callbacks["stroke-width"] = function(d){return tree.branchStrokeWidth;}};
 
     tree.nodes.forEach(function(d){
         d.branchAttributes.stroke = tmp_callbacks.stroke(d);

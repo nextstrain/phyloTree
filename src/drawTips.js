@@ -1,11 +1,6 @@
 import d3 from "d3";
 
 
-const defaultTipRadius = 4.0;
-const defaultTipStroke = "#555";
-const defaultTipFill = "#555";
-const defaultTipStrokeWidth = 2.0;
-
 /**
  *
  * @param  {object} tree the phyloTree data structure
@@ -15,10 +10,10 @@ export const drawTips = function(tree, callbacks){
     setupTips(tree);
 
 	const tmp_callbacks = Object.assign({}, callbacks);
-	if (!tmp_callbacks.r){tmp_callbacks.r = function(d){return defaultTipRadius;}};
-	if (!tmp_callbacks.fill){tmp_callbacks.fill = function(d){return defaultTipFill;}};
-	if (!tmp_callbacks.stroke){tmp_callbacks.stroke = function(d){return defaultTipStroke;}};
-    if (!tmp_callbacks.strokeWidth){tmp_callbacks.strokeWidth = function(d){return defaultTipStrokeWidth;}};
+	if (!tmp_callbacks.r){tmp_callbacks.r = function(d){return tree.tipRadius;}};
+	if (!tmp_callbacks.fill){tmp_callbacks.fill = function(d){return tree.tipFill;}};
+	if (!tmp_callbacks.stroke){tmp_callbacks.stroke = function(d){return tree.tipStroke;}};
+    if (!tmp_callbacks.strokeWidth){tmp_callbacks.strokeWidth = function(d){return tree.tipStrokeWidth;}};
 
     tree.tips.forEach(function(d){
         d.tipAttributes.r = tmp_callbacks.r(d);

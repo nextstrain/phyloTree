@@ -2,6 +2,8 @@ import treeLayout from "./treeLayout";
 import treeCanvas from "./treeCanvas";
 import {preOrderIteration} from "./treeHelpers";
 
+
+
 /**
  * takes an augur json and converts it into the a tree structure
  * that included information needed for drawing and manipulation
@@ -10,8 +12,24 @@ import {preOrderIteration} from "./treeHelpers";
  * @return {object}       object storing treeJson and other information about tree display
  */
 const phyloTree = function(treeJson, params) {
+    const defaultsParams = {
+      layout:"rect",
+      distance:"div",
+      orientation:{x:1, y:1},
+      callbacks:{},
+      zoomLevel:{x:1.0, y:1.0},
+      pan:{x:0.0, y:0.0},
+      tipRadius:4.0,
+      tipStroke:"#555",
+      tipFill:"#555",
+      tipStrokeWidth:2.0,
+      branchStroke:"#555",
+      branchStrokeWidth:2.0,
+    }
+
     const phyloNodes = [];
     const nodeArray = [];
+    const treeParams = Object.assign(defaultsParams, params);
     const makeNodeArray = function(node){
         if (node.children){
           var child;
@@ -58,20 +76,17 @@ const phyloTree = function(treeJson, params) {
             d.children = d.n.children.map(function(x){return x.shell;});
         }
     });
+    const nc=100.0;
+    treeParams.tipRadius = Math.max(1.0, nc*treeParams.tipRadius/(nc+nodeArray.length));
+    treeParams.branchStrokeWidth = Math.max(1.0, nc*treeParams.branchStrokeWidth/(nc+nodeArray.length));
     const newTree = Object.assign(
                         {nodes:phyloNodes,
                          tips: phyloNodes.filter(function(d){return d.terminal;}),
                          internals: phyloNodes.filter(function(d){return !d.terminal;}),
-                         layout:"rect",
-                         distance:"div",
                          xScale: d3.scale.linear(),
                          yScale: d3.scale.linear(),
-                         orientation:{x:1, y:1},
-                         callbacks:{},
-                         zoomLevel:{x:1.0, y:1.0},
-                         pan:{x:0.0, y:0.0},
                         },
-                        params);
+                        treeParams);
     if (!newTree.dimension && newTree.svg){
         newTree.dimensions = {width:parseInt(newTree.svg.attr("width"), 10),
                               height:parseInt(newTree.svg.attr("height"), 10)};
