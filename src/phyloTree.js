@@ -25,6 +25,7 @@ const phyloTree = function(treeJson, params) {
       tipStrokeWidth:2.0,
       branchStroke:"#555",
       branchStrokeWidth:2.0,
+      autoTipSize:true
     }
 
     const phyloNodes = [];
@@ -77,8 +78,10 @@ const phyloTree = function(treeJson, params) {
         }
     });
     const nc=100.0;
+    if (treeParams.autoTipSize){
     treeParams.tipRadius = Math.max(1.0, nc*treeParams.tipRadius/(nc+nodeArray.length));
     treeParams.branchStrokeWidth = Math.max(1.0, nc*treeParams.branchStrokeWidth/(nc+nodeArray.length));
+    }
     const newTree = Object.assign(
                         {nodes:phyloNodes,
                          tips: phyloNodes.filter(function(d){return d.terminal;}),
