@@ -1,3 +1,7 @@
+# ARCHIVED
+
+This repo us an ancient precursor of what became auspice. 
+
 ### phyloTree: interactive phylogenetic tree viewer
 
 phyloTree takes tree in json format as input. Each internal node as a `.children` array with descendent nodes. Furthermore, each node has a `.attr` attribute that stores meta data and branch length information.
